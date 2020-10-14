@@ -29,10 +29,14 @@ const BlogIndex = ({ data, location }) => {
       <Bio />
       <ol style={{ listStyle: `none` }}>
         {posts.map(post => {
-          const title = post.frontmatter.title || post.fields.slug
+          const title =
+            post.frontmatter.title ||
+            `${post.frontmatter.template === "custom" ? "/samepath" : ""}${
+              post.gatsbyPath
+            }`
 
           return (
-            <li key={post.fields.slug}>
+            <li key={post.gatsbyPath}>
               <article
                 className="post-list-item"
                 itemScope
@@ -40,7 +44,14 @@ const BlogIndex = ({ data, location }) => {
               >
                 <header>
                   <h2>
-                    <Link to={post.fields.slug} itemProp="url">
+                    <Link
+                      to={`${
+                        post.frontmatter.template === "custom"
+                          ? "/samepath"
+                          : ""
+                      }${post.gatsbyPath}`}
+                      itemProp="url"
+                    >
                       <span itemProp="headline">{title}</span>
                     </Link>
                   </h2>
@@ -74,6 +85,7 @@ export const pageQuery = graphql`
     }
     allMarkdownRemark(sort: { fields: [frontmatter___date], order: DESC }) {
       nodes {
+        gatsbyPath(filePath: "/{MarkdownRemark.fields__slug}")
         excerpt
         fields {
           slug
@@ -82,6 +94,7 @@ export const pageQuery = graphql`
           date(formatString: "MMMM DD, YYYY")
           title
           description
+          template
         }
       }
     }

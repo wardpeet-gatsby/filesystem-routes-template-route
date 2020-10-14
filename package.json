@@ -32,6 +32,7 @@
     "typeface-montserrat": "0.0.75"
   },
   "devDependencies": {
+    "cross-env": "^7.0.2",
     "prettier": "2.1.2"
   },
   "homepage": "https://github.com/gatsbyjs/gatsby-starter-blog#readme",
@@ -45,8 +46,8 @@
     "url": "git+https://github.com/gatsbyjs/gatsby-starter-blog.git"
   },
   "scripts": {
-    "build": "gatsby build",
-    "develop": "gatsby develop",
+    "build": "cross-env GATSBY_EXPERIMENTAL_ROUTING_APIS=1 gatsby build",
+    "develop": "cross-env GATSBY_EXPERIMENTAL_ROUTING_APIS=1 gatsby develop",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
     "start": "npm run develop",
     "serve": "gatsby serve",

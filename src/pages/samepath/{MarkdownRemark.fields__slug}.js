@@ -1,9 +1,9 @@
-import React from "react"
-import { Link, graphql } from "gatsby"
+import * as React from "react"
+import { graphql, unstable_collectionGraphql } from "gatsby"
 
-import Bio from "../components/bio"
-import Layout from "../components/layout"
-import SEO from "../components/seo"
+import Bio from "../../components/bio"
+import Layout from "../../components/layout"
+import SEO from "../../components/seo"
 
 const BlogPostTemplate = ({ data, pageContext, location }) => {
   const post = data.markdownRemark
@@ -12,7 +12,7 @@ const BlogPostTemplate = ({ data, pageContext, location }) => {
   return (
     <Layout location={location} title={siteTitle}>
       <SEO
-        title={post.frontmatter.title}
+        title={`I don't want a different path - ${post.frontmatter.title} (custom)`}
         description={post.frontmatter.description || post.excerpt}
       />
       <article
@@ -37,16 +37,23 @@ const BlogPostTemplate = ({ data, pageContext, location }) => {
   )
 }
 
+export const collectionQuery = unstable_collectionGraphql`
+{
+  allMarkdownRemark(filter: {frontmatter: {template: {eq: "custom"}}}) {
+    ...CollectionPagesQueryFragment
+  }
+}`
+
 export default BlogPostTemplate
 
 export const pageQuery = graphql`
-  query BlogPostBySlug($slug: String!) {
+  query($id: String!) {
     site {
       siteMetadata {
         title
       }
     }
-    markdownRemark(fields: { slug: { eq: $slug } }) {
+    markdownRemark(id: { eq: $id }) {
       id
       excerpt(pruneLength: 160)
       html

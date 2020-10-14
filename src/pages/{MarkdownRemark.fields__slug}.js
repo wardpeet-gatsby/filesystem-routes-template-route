@@ -1,5 +1,5 @@
-import React from "react"
-import { Link, graphql } from "gatsby"
+import * as React from "react"
+import { graphql, unstable_collectionGraphql } from "gatsby"
 
 import Bio from "../components/bio"
 import Layout from "../components/layout"
@@ -12,7 +12,7 @@ const BlogPostTemplate = ({ data, pageContext, location }) => {
   return (
     <Layout location={location} title={siteTitle}>
       <SEO
-        title={post.frontmatter.title}
+        title={`I want custom template to have same url - ${post.frontmatter.title} (default)`}
         description={post.frontmatter.description || post.excerpt}
       />
       <article
@@ -37,16 +37,23 @@ const BlogPostTemplate = ({ data, pageContext, location }) => {
   )
 }
 
+export const collectionQuery = unstable_collectionGraphql`
+{
+  allMarkdownRemark(filter: {frontmatter: {template: {eq: "default"}}}) {
+    ...CollectionPagesQueryFragment
+  }
+}`
+
 export default BlogPostTemplate
 
 export const pageQuery = graphql`
-  query BlogPostBySlug($slug: String!) {
+  query($id: String!) {
     site {
       siteMetadata {
         title
       }
     }
-    markdownRemark(fields: { slug: { eq: $slug } }) {
+    markdownRemark(id: { eq: $id }) {
       id
       excerpt(pruneLength: 160)
       html
