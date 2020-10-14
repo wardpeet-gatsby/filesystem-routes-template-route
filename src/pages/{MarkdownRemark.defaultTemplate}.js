@@ -37,10 +37,17 @@ const BlogPostTemplate = ({ data, pageContext, location }) => {
   )
 }
 
+export const defaultTemplate = item => item.fields.slug
+
 export const collectionQuery = unstable_collectionGraphql`
 {
   allMarkdownRemark(filter: {frontmatter: {template: {eq: "default"}}}) {
     ...CollectionPagesQueryFragment
+    nodes {
+      fields {
+        slug
+      }
+    }
   }
 }`
 

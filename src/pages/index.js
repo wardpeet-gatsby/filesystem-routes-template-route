@@ -29,11 +29,7 @@ const BlogIndex = ({ data, location }) => {
       <Bio />
       <ol style={{ listStyle: `none` }}>
         {posts.map(post => {
-          const title =
-            post.frontmatter.title ||
-            `${post.frontmatter.template === "custom" ? "/samepath" : ""}${
-              post.gatsbyPath
-            }`
+          const title = post.frontmatter.title || post.gatsbyPath
 
           return (
             <li key={post.gatsbyPath}>
@@ -44,14 +40,7 @@ const BlogIndex = ({ data, location }) => {
               >
                 <header>
                   <h2>
-                    <Link
-                      to={`${
-                        post.frontmatter.template === "custom"
-                          ? "/samepath"
-                          : ""
-                      }${post.gatsbyPath}`}
-                      itemProp="url"
-                    >
+                    <Link to={post.gatsbyPath} itemProp="url">
                       <span itemProp="headline">{title}</span>
                     </Link>
                   </h2>
@@ -85,7 +74,9 @@ export const pageQuery = graphql`
     }
     allMarkdownRemark(sort: { fields: [frontmatter___date], order: DESC }) {
       nodes {
-        gatsbyPath(filePath: "/{MarkdownRemark.fields__slug}")
+        # Not sure how this would work but overall I don't like the filePath filter we have to put here
+        # I think it should return an array by default and the filePath argument could be a filter
+        gatsbyPath
         excerpt
         fields {
           slug
