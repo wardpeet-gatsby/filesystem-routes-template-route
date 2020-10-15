@@ -1,9 +1,9 @@
 import * as React from "react"
 import { graphql, unstable_collectionGraphql } from "gatsby"
 
-import Bio from "../../components/bio"
-import Layout from "../../components/layout"
-import SEO from "../../components/seo"
+import Bio from "../components/bio"
+import Layout from "../components/layout"
+import SEO from "../components/seo"
 
 const BlogPostTemplate = ({ data, pageContext, location }) => {
   const post = data.markdownRemark
@@ -12,7 +12,7 @@ const BlogPostTemplate = ({ data, pageContext, location }) => {
   return (
     <Layout location={location} title={siteTitle}>
       <SEO
-        title={`I don't want a different path - ${post.frontmatter.title} (custom)`}
+        title={`I want custom template to have same url - ${post.frontmatter.title} (default)`}
         description={post.frontmatter.description || post.excerpt}
       />
       <article
@@ -37,9 +37,15 @@ const BlogPostTemplate = ({ data, pageContext, location }) => {
   )
 }
 
+export const something = {
+  type: MarkdownRemark,
+  slug: item => item.fields.slug
+}
+
+
 export const collectionQuery = unstable_collectionGraphql`
 {
-  allMarkdownRemark(filter: {frontmatter: {template: {eq: "custom"}}}) {
+  allMarkdownRemark(filter: {frontmatter: {template: {eq: "default"}}}) {
     ...CollectionPagesQueryFragment
   }
 }`
